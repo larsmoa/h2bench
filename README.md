@@ -4,6 +4,24 @@ h2bench is a tool for testing how response size affects throughput when using HT
 
 In order to test performance I recommend [h2load](https://nghttp2.org/documentation/h2load-howto.html).
 
+Installation
+============
+You'll need [go][https://www.golang.org/] and [glide][https://github.com/Masterminds/glide] to build h2bench.
+```
+glide install
+go build
+```
+
+Command line usage
+==================
+Usage of ./h2bench:
+  -cert string
+    	TLS certificate to use to secure the HTTP link.
+  -key string
+    	TLS private key to use to secure the HTTP link.
+  -serverAddress string
+    	The address to bind to (default ":8000")
+
 Generating certificate
 ==================
 You'll need a TLS certificate in order to use HTTP/2. To generate one, use:
