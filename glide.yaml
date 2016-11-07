@@ -1,0 +1,6 @@
+package: github.com/larsmoa/h2bench
+import:
+- package: github.com/gorilla/mux
+  version: ^1.1.0
+- package: github.com/gorilla/context
+- package: github.com/gorilla/handlers
