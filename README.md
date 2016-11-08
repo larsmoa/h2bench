@@ -30,3 +30,5 @@ openssl genrsa 2048 > server.key
 chmod 400 server.key
 openssl req -new -x509 -nodes -sha1 -days 3650 -key server.key > server.cert
 ```
+
+Enter the address of your server when asked for FQDN.
