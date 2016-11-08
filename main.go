@@ -16,6 +16,7 @@ import (
 var serverAddress = ":8000"
 var tlsCertFile = ""
 var tlsKeyFile = ""
+var verbose = false
 
 func parseFlags() {
 	flag.StringVar(&serverAddress, "serverAddress", serverAddress,
@@ -24,14 +25,14 @@ func parseFlags() {
 		"TLS certificate to use to secure the HTTP link.")
 	flag.StringVar(&tlsKeyFile, "key", tlsKeyFile,
 		"TLS private key to use to secure the HTTP link.")
+	flag.BoolVar(&verbose, "verbose", verbose,
+		"Enable logging of each request")
 	flag.Parse()
 }
 
 func handleRandomBytes(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	byteCount, _ := strconv.Atoi(vars["byteCount"])
-
-	fmt.Printf("")
 
 	buf := make([]byte, byteCount)
 	rand.Read(buf)
@@ -43,8 +44,13 @@ func handleRandomBytes(w http.ResponseWriter, r *http.Request) {
 
 func startServer() error {
 	r := mux.NewRouter()
-	r.Handle("/random/{byteCount:[0-9]+}",
-		handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handleRandomBytes)))
+	var handler http.Handler
+	if verbose {
+		handler = handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handleRandomBytes))
+	} else {
+		handler = http.HandlerFunc(handleRandomBytes)
+	}
+	r.Handle("/random/{byteCount:[0-9]+}", handler)
 
 	server := http.Server{
 		Addr:    serverAddress,
